@@ -35,8 +35,32 @@ def get_transform_data(data_path):
         data['is_fraud'] = data['acct_type'].apply(lambda x: 1 if 'fraud' in x else 0)
     else:
         data['is_fraud']=data.iloc[:, 0].apply(lambda x: 'unknown')
-    
+    for col in required_columns:
+        if col not in data.columns:
+                data[col] = data.iloc[:, 0].apply(lambda x: 0)
+
     data_model=data[required_columns]
+    y = data['is_fraud']
+    X = data_model
+    return X, y
+
+def get_transform_data_dict(row):
+    #data = pd.read_json(data_path)
+    data = pd.DataFrame.from_dict([row])
+    required_columns=['body_length', 'channels', 'delivery_method', 'event_published',
+        'fb_published', 'has_analytics', 'has_logo',
+        'name_length', 'num_order', 'num_payouts', 'org_facebook',
+        'org_twitter', 'sale_duration', 'sale_duration2', 'show_map',
+        'user_age', 'user_created', 'user_type']
+    if 'acct_type' in data.columns:
+        data['is_fraud'] = data['acct_type'].apply(lambda x: 1 if 'fraud' in x else 0)
+    else:
+        data['is_fraud']=data.iloc[:, 0].apply(lambda x: 'unknown')
+    for col in required_columns:
+        if col not in data.columns:
+                data[col] = data.iloc[:, 0].apply(lambda x: 0)
+    data_model=data[required_columns]
+    
     y = data['is_fraud']
     X = data_model
     return X, y

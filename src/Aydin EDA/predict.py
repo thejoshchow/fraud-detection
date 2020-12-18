@@ -8,8 +8,8 @@ def get_model(modelpath='rf.pkl'):
     "Unpickles and returns model"
     return pickle.load(open(modelpath,'rb'))
 
-def mypred(filepath, modelpath):
-    X, y = get_transform_data(filepath)
+def mypred(X, y, modelpath='rf.pkl'):
+    
     X = X.fillna(0)
     model = get_model(modelpath)
     y_rf = model.predict(X)
@@ -35,6 +35,7 @@ if __name__ == '__main__':
     # y_rf_proba = model.predict_proba(X)
     # print(y_rf)
     # print(y_rf_proba)
-    y_rf, y_rf_proba=mypred('test_script_examples.json', 'rf.pkl')
+    X, y = get_transform_data('test_script_examples.json')
+    y_rf, y_rf_proba=mypred(X,y, 'rf.pkl')
     print(y_rf)
     print(y_rf_proba)

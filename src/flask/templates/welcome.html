@@ -1,1 +1,104 @@
-welcome
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Fraud Detector</title>
+  <meta name="description" content="Detection">
+  <meta name="author" content="Galvanize">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}">
+  </script>
+  <!-- <script type="text/javascript"
+          src="{{ url_for('static', filename='app.js') }}">
+    </script> -->
+
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Very Sophisticated Fraud Detector, by Galvanize DSI Consulting, Inc.</h1>
+
+    <div class="row">
+      <p>This amazing app will save your company so much money, by catching fraudulent payments!</p>
+      <p>Please enter the transaction ID. </p>
+      <p>We will quickly tell you whether or not you are dealing with a trustworthy customer.</p>
+    </div>
+
+    <div class="row">
+      <div class="form-inline">
+
+
+
+        <div class="form-group">
+          <p class="form-control-static">Transaction ID:</p>
+        </div>
+        <div class="form-group">
+          <input class="form-control" id="transaction_id"></input>
+        </div>
+
+        <div class="form-group">
+          <button id="detect" class="btn-primary">Detect!</button>
+          <button id="clear" class="btn-primary">Clear!</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <p> Probability this transaction is fraudulent: <br /> <input id="result"> </input> </p>
+    </div>
+
+  </div>
+
+  <script>
+    let get_input = function () {
+      let transaction_id = $("input#transaction_id").val()
+      console.log(transaction_id)
+      return { 'transaction_id': parseInt(transaction_id) }
+    };
+
+    let send_query_json = function (query) {
+      $.ajax({
+        url: '/detect',
+        contentType: "application/json; charset=utf-8",
+        type: 'POST',
+        success: function (data) {
+          display_result(data);
+        },
+        data: JSON.stringify(query)
+      });
+    };
+
+
+
+    let display_result = function (result) {
+      console.log(result)
+      $("input#result").val(result.result)
+    }
+
+
+
+    $(document).ready(function () {
+      $("button#detect").click(function () {
+        let query = get_input();
+        console.log(query);
+        send_query_json(query);
+      });
+
+      $("button#clear").click(function () {
+        $("input#transaction_id").val('');
+        $("input#result").val("");
+      })
+    })
+
+  </script>
+
+</body>
+
+</html>

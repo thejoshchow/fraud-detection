@@ -7,16 +7,24 @@ from model import get_transform_data_dict
 from predict import get_model, mypred
 import pandas as pd
 
-def db_add(data, y_prob):
+def db_add(data):
+    X, y = get_transform_data_dict(data)
+    y_proba = mypred(X,y)
+    df = pd.DataFrame.from_dict([data])
+    prob=y_proba[0][1]
+    df['fraud_prob']=prob
     
-    data['fraud_prob']=y_prob
     client = MongoClient()
     db = client['test_database']
     test_collection = db['test_collection']
-    df = pd.DataFrame.from_dict([data])
+    
     d=df.to_dict('records')[0]
     test_collection.insert_one(d)
     print('inserted')
+    print(f'calculated: {y_proba[0][1]}')
+    #print(df.head())
+    #print(d)
+    #test_collection.update_one({'fraud_prob':y_proba[0][1]})
     client.close()
 
 
@@ -36,12 +44,11 @@ class EventAPIClient:
         self.interval = 30
 
     def save_to_database(self, row):
-        X, y = get_transform_data_dict(row)
-        y_rf_proba = mypred(X,y)
+
 
         """Save a data row to the database."""
         print("Received data:\n" + repr(row) + "\n")  # replace this with your code
-        db_add(row,y_rf_proba[0][1])
+        db_add(row[0])
     
     def get_data(self):
         """Fetch data from the API."""

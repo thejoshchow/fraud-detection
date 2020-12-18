@@ -14,7 +14,7 @@ def mypred(X, y, modelpath='rf.pkl'):
     model = get_model(modelpath)
     y_rf = model.predict(X)
     y_rf_proba = model.predict_proba(X)
-    return y_rf, y_rf_proba
+    return y_rf_proba
 
 def db_add(data, y_prob):
     
@@ -25,6 +25,7 @@ def db_add(data, y_prob):
     df = pd.DataFrame.from_dict([data])
     d=df.to_dict('records')[0]
     test_collection.insert_one(d)
+    print('inserted')
     client.close()
 
 if __name__ == '__main__':

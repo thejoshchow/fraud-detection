@@ -2,6 +2,22 @@
 import time
 import requests
 import pymongo
+from pymongo import MongoClient
+from model import get_transform_data_dict
+from predict import get_model, mypred
+import pandas as pd
+
+def db_add(data, y_prob):
+    
+    data['fraud_prob']=y_prob
+    client = MongoClient()
+    db = client['test_database']
+    test_collection = db['test_collection']
+    df = pd.DataFrame.from_dict([data])
+    d=df.to_dict('records')[0]
+    test_collection.insert_one(d)
+    print('inserted')
+    client.close()
 
 
 class EventAPIClient:
@@ -20,9 +36,13 @@ class EventAPIClient:
         self.interval = 30
 
     def save_to_database(self, row):
+        X, y = get_transform_data_dict(row)
+        y_rf_proba = mypred(X,y)
+
         """Save a data row to the database."""
         print("Received data:\n" + repr(row) + "\n")  # replace this with your code
-
+        db_add(row,y_rf_proba[0][1])
+    
     def get_data(self):
         """Fetch data from the API."""
         payload = {'api_key': self.api_key,

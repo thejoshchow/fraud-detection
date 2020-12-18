@@ -13,16 +13,7 @@ def home():
     return ''' <p> Welcome to Very Sophisticated Fraud Detection, Inc. Here is 
                    <a href="/information about our technology">information about our technology</a> and here is our very impressive
                    <a href="/Detection Tool!">Detection Tool!</a> </p> '''
-
-          # <!DOCTYPE html>
-          # <html>
-            
-          # <center>
-          # <body  style = "background-image: <img src = {{ url_for('static', filename='fraud_stockphoto.jpg')}}>
-          #       {0}</body></center>
-          # </html>
-          # '''.format(result)
-
+          
 @app.route('/information about our technology', methods=['GET'])
 def hello_world():
     return ''' <h1> ABOUT US </h1> <p>Very Sophisticated Fraud Detection was developed by Opa Towobola, Mary MacCarthy, Aydin Hadlani, and Joshua Chow who are employees of Galvanize DSI consulting.</p>
@@ -42,6 +33,14 @@ def reverse_string():
     text = str(request.form['some_string'])
     reversed_string = text[-1::-1]
     return ''' output: {}  '''.format(reversed_string)
+
+            <!DOCTYPE html>
+            <html>
+            
+            <center>
+            <body  style = "background-image: <img src = {{ url_for('static', filename='fraud_stockphoto.jpg')}}>
+                {0}</body></center>
+            </html>
              
 
 # BELOW IS THE CODE WHERE WE WILL PLUG IN OUR PREDICTION MODEL(S)

@@ -48,7 +48,7 @@ class EventAPIClient:
 
         """Save a data row to the database."""
         print("Received data:\n" + repr(row) + "\n")  # replace this with your code
-        db_add(row[0])
+        db_add(row)
     
     def get_data(self):
         """Fetch data from the API."""
